@@ -34,18 +34,17 @@ The configuration is located in the file `appsettings.json`, resembling:
 The JWT that you'll recieve will look like this:
 ```
 {
-  "sub": "user",
+  "sub": "1",
   "iss": "DiscourseSso",
   "iat": 1485393544,
   "exp": 1487985544,
   "aud": "DefaultAud",
-  "nonce": "XXwJURHs00iDxiFyoeYTg",
   "name": "UserName+LastName",
   "username": "user",
   "email": "user@example.com",
   "external_id": "1",
-  "return_sso_url": "http://localhost:5000/Auth/GetToken",
   "admin": "true",
   "moderator": "false"
 }
 ```
+The `sub` claim is equivalent to `external_id`.
