@@ -35,15 +35,19 @@ namespace DiscourseSso.Controllers
 
         public async Task<IActionResult> Login()
         {
+            // generate & store nonce in cache
             string nonce = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("=", "").Replace("+", "");
-            await _cache.SetStringAsync(nonce, "");
+            await _cache.SetStringAsync(nonce, "_");
+
             string returnUrl = $"http://{Request.Host.Value}/Auth/GetToken";
 
+            // create payload, base64 encode & url encode
             string payload = $"nonce={nonce}&return_sso_url={returnUrl}";
 
             string base64Payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));
             string urlEncodedPayload = Uri.EscapeUriString(base64Payload);
 
+            // generating HMAC-SHA256 from base64-encoded payload using sso secret as signiture
             string hexSigniture;
             using (HMACSHA256 hmac = new HMACSHA256(Encoding.ASCII.GetBytes(_config["DiscourseSso:SsoSecret"])))
             {
@@ -51,6 +55,7 @@ namespace DiscourseSso.Controllers
                 hexSigniture = BitConverter.ToString(sha256).Replace("-", "").ToLower();
             }
 
+            // send auth request to Discourse
             string redirectTo = $"{_config["DiscourseSso:DiscourseRootUrl"]}/session/sso_provider?sso={urlEncodedPayload}&sig={hexSigniture}";
             return Redirect(redirectTo);
 
@@ -84,7 +89,5 @@ namespace DiscourseSso.Controllers
 
             return Ok(jwt);
         }
-
-
     }
 }
