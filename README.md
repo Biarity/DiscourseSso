@@ -1,5 +1,5 @@
 # Discourse SSO
-Easy, configurable Discourse SSO: **GET /auth/login -> recieve a JWT with user data**. 
+Easy, configurable Discourse SSO: **GET /auth/login -> recieve a JWT with user data**. Allows using Discord as your SSO provider to authenticate users into your own websites.
 
 Based on the [official implementation](https://meta.discourse.org/t/using-discourse-as-a-sso-provider/32974), written in ASP.NET Core, but you needn't touch the code, everything is setup using [configuration](#configuration). This means you can use this regardless of your tech stack.
 
