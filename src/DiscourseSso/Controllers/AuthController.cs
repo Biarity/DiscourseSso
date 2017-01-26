@@ -63,28 +63,34 @@ namespace DiscourseSso.Controllers
 
         public async Task<IActionResult> GetToken(string sig, string sso)
         {
-            
+            // generate HMAC-SHA256 from sso using sso secret as key
             byte[] ssoSha256;
             using (HMACSHA256 hmac = new HMACSHA256(Encoding.ASCII.GetBytes(_config["DiscourseSso:SsoSecret"])))
-            {
                 ssoSha256 = hmac.ComputeHash(Encoding.ASCII.GetBytes(sso));
-            }
 
+            // convert sig from HEX to bytes
             byte[] sigBytes = _helpers.HexStringToByteArray(sig);
 
+            // making sure above two aree equal
             if (Encoding.ASCII.GetString(ssoSha256) != Encoding.ASCII.GetString(sigBytes))
             {
                 _logger.LogDebug($"ssoSha256 != sigBytes");
                 return BadRequest("Somehting went wrong.");
             }
 
+            // base64-decoding & url-decoding sso
             string base64Sso = Uri.UnescapeDataString(Encoding.UTF8.GetString(Convert.FromBase64String(sso)));
 
+            // convering sso query string to dictionary
             var userInfo = base64Sso.Replace("?", "").Split('&').ToDictionary(x => x.Split('=')[0], x => x.Split('=')[1]);
 
+            // verifiying nonce in sso has been added before, remove if true
             if (await _cache.GetStringAsync(userInfo["nonce"]) == null)
                 return BadRequest("Nonce not previously registered or has expired.");
-            
+            else
+                await _cache.RemoveAsync(userInfo["nonce"]);
+
+            // creating JWT with info from sso as claims
             string jwt = _helpers.CreateJwt(userInfo["username"], userInfo);
 
             return Ok(jwt);
