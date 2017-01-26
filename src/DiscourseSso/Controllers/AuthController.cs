@@ -37,7 +37,11 @@ namespace DiscourseSso.Controllers
         {
             // generate & store nonce in cache
             string nonce = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("=", "").Replace("+", "");
-            await _cache.SetStringAsync(nonce, "_");
+            await _cache.SetStringAsync(nonce, "_", 
+                new DistributedCacheEntryOptions()
+                {
+                    SlidingExpiration = new TimeSpan(12, 0, 0) // nonce lasts only 12 hours
+                });
 
             string returnUrl = $"http://{Request.Host.Value}/Auth/GetToken";
 
