@@ -95,7 +95,7 @@ namespace DiscourseSso.Controllers
                 await _cache.RemoveAsync(userInfo["nonce"]);
 
             // creating JWT with info from sso as claims
-            string jwt = _helpers.CreateJwt(userInfo["username"], userInfo);
+            string jwt = _helpers.CreateJwt(userInfo["external_id"], userInfo);
 
             return Ok(jwt);
         }
