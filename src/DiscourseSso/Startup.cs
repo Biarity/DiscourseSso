@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DiscourseSso.Services;
 
 namespace DiscourseSso
 {
@@ -28,6 +29,7 @@ namespace DiscourseSso
         {
             services.AddDistributedMemoryCache();
             services.AddSingleton(Configuration);
+            services.AddScoped<Helpers>();
 
             // framework services
             services.AddMvc();

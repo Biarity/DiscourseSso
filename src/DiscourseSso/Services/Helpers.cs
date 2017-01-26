@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscourseSso.Services
@@ -45,6 +46,14 @@ namespace DiscourseSso.Services
                 .ToUniversalTime()
                 .Subtract(new DateTime(1970, 1, 1)))
                 .TotalSeconds;
+        }
+
+        public byte[] HexStringToByteArray(string hex)
+        {
+            byte[] bytes = new byte[hex.Length / 2];
+            for (int i = 0; i < hex.Length; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            return bytes;
         }
     }
 }

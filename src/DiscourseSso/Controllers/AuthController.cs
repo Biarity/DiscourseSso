@@ -9,21 +9,28 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Jose;
+using DiscourseSso.Services;
 
 namespace DiscourseSso.Controllers
 {
     [Route("[controller]/[action]")]
     public class AuthController : Controller
     {
-        private IConfigurationRoot _config;
         private IDistributedCache _cache;
+        private IConfigurationRoot _config;
         private ILogger<AuthController> _logger;
+        private Helpers _helpers;
 
-        public AuthController(IDistributedCache cache, IConfigurationRoot config, ILogger<AuthController> logger)
+        public AuthController(
+            IDistributedCache cache, 
+            IConfigurationRoot config, 
+            ILogger<AuthController> logger,
+            Helpers helpers)
         {
-            _logger = logger;
-            _config = config;
             _cache = cache;
+            _config = config;
+            _logger = logger;
+            _helpers = helpers;
         }
 
         public async Task<IActionResult> Login()
@@ -58,7 +65,7 @@ namespace DiscourseSso.Controllers
                 ssoSha256 = hmac.ComputeHash(Encoding.ASCII.GetBytes(sso));
             }
 
-            byte[] sigBytes = StringToByteArray(sig);
+            byte[] sigBytes = _helpers.HexStringToByteArray(sig);
 
             if (Encoding.ASCII.GetString(ssoSha256) != Encoding.ASCII.GetString(sigBytes))
             {
@@ -73,19 +80,11 @@ namespace DiscourseSso.Controllers
             if (await _cache.GetStringAsync(userInfo["nonce"]) == null)
                 return BadRequest("Nonce not previously registered or has expired.");
             
-            string jwt = CreateJwt(userInfo["username"], userInfo);
+            string jwt = _helpers.CreateJwt(userInfo["username"], userInfo);
 
             return Ok(jwt);
         }
 
-        private static byte[] StringToByteArray(string hex)
-        {
-            byte[] bytes = new byte[hex.Length / 2];
-            for (int i = 0; i < hex.Length; i += 2)
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            return bytes;
-        }
 
-       
     }
 }
