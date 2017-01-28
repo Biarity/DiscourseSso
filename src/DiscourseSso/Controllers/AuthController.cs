@@ -13,7 +13,7 @@ using DiscourseSso.Services;
 
 namespace DiscourseSso.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class AuthController : Controller
     {
         private IDistributedCache _cache;
@@ -43,7 +43,7 @@ namespace DiscourseSso.Controllers
                     SlidingExpiration = new TimeSpan(12, 0, 0) // nonce lasts only 12 hours
                 });
 
-            string returnUrl = $"http://{Request.Host.Value}/Auth/GetToken";
+            string returnUrl = $"http://{Request.Host.Value}/api/Auth/GetToken";
 
             // create payload, base64 encode & url encode
             string payload = $"nonce={nonce}&return_sso_url={returnUrl}";
