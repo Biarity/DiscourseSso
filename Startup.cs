@@ -29,7 +29,7 @@ namespace DiscourseSso
         {
             services.AddDistributedMemoryCache();
             services.AddSingleton(Configuration);
-            services.AddScoped<Helpers>();
+            services.AddScoped<AuthService>();
 
             // framework services
             services.AddMvc();

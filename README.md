@@ -6,7 +6,7 @@ Based on the [official implementation](https://meta.discourse.org/t/using-discou
 Using this will alow you to share your discourse userbase with your websites!
 
 # Usage
-1. [Build](https://docs.microsoft.com/en-us/dotnet/articles/core/deploying/) the project for your target OS (probably ubuntu)
+1. Add `AuthController.cs` as a controller & `AuthService.cs` as a service (IoC injected)
 2. Add your [configuration](#configuration) to `appsettings.json`
 3. In your Discourse app, go to settings -> login -> and set `enable sso provider` to true, also enter the `sso secret`
 4. Thats it! Perform `GET api/auth/login` to get a [JWT contining user data](#token)! (the user will be prompted to log in if not already logged in)

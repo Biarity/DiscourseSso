@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DiscourseSso.Services
 {
-    public class Helpers
+    public class AuthService
     {
         private IConfigurationRoot _config;
-        public Helpers(IConfigurationRoot config)
+        public AuthService(IConfigurationRoot config)
         {
             _config = config;
         }

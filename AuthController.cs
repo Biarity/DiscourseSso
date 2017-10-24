@@ -59,9 +59,9 @@ namespace DiscourseSso.Controllers
                 hexSigniture = BitConverter.ToString(sha256).Replace("-", "").ToLower();
             }
 
-            // send auth request to Discourse
+            // send auth request to url to client
             string redirectTo = $"{_config["DiscourseSso:DiscourseRootUrl"]}/session/sso_provider?sso={urlEncodedPayload}&sig={hexSigniture}";
-            return Redirect(redirectTo);
+            return Ok(redirectTo);
 
         }
 
