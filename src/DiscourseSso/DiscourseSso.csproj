@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>DiscourseSso</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>DiscourseSso</PackageId>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <AssetTargetFallback>$(AssetTargetFallback);dotnet5.6;portable-net45+win8</AssetTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
+    <PackageReference Include="jose-jwt" Version="2.4.0" />
+  </ItemGroup>
+
+</Project>
